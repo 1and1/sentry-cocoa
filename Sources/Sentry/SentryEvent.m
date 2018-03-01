@@ -147,6 +147,7 @@ NS_ASSUME_NONNULL_BEGIN
     [serializedData setValue:[self.context serialize] forKey:@"contexts"];
     
     [serializedData setValue:self.message forKey:@"message"];
+    [serializedData setValue:self.culprit forKey:@"culprit"];
     [serializedData setValue:self.logger forKey:@"logger"];
     [serializedData setValue:self.serverName forKey:@"server_name"];
 }

@@ -34,6 +34,8 @@ SENTRY_NO_INIT
  */
 @property(nonatomic, copy) NSString *message;
 
+@property(nonatomic, copy) NSString *culprit;
+
 /**
  * NSDate of when the event occured
  */
