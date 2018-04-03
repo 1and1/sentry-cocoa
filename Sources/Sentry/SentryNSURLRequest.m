@@ -81,14 +81,20 @@ NSTimeInterval const SentryRequestTimeout = 15;
     return self;
 }
 
-+ (NSURL *)getStoreUrlFromDsn:(SentryDsn *)dsn {
++ (NSURL *)getStoreUrlFromDsn:(SentryDsn *)dsn
+{
     NSURL *url = dsn.url;
-    NSString *projectId = url.pathComponents[1];
     NSURLComponents *components = [NSURLComponents new];
     components.scheme = url.scheme;
     components.host = url.host;
     components.port = url.port;
-    components.path = [NSString stringWithFormat:@"/api/%@/store/", projectId];
+    
+    NSMutableArray *pathArray = [url.pathComponents mutableCopy];
+    [pathArray insertObject:@"api" atIndex:url.pathComponents.count - 1]; // creating DSN ensured there are at least 2 components
+    [pathArray addObjectsFromArray:@[@"store", @""]];
+    [pathArray replaceObjectAtIndex:0 withObject:@""];
+    components.path = [pathArray componentsJoinedByString:@"/"];
+
     return components.URL;
 }
 
