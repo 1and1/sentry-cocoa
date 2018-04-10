@@ -26,6 +26,8 @@
 #import <UIKit/UIKit.h>
 #endif
 
+#include <sys/sysctl.h>
+
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation SentryContext
@@ -112,6 +114,8 @@ NS_ASSUME_NONNULL_BEGIN
     [serializedData setValue:systemInfo[@"storageSize"] forKey:@"storage_size"];
     [serializedData setValue:systemInfo[@"bootTime"] forKey:@"boot_time"];
     [serializedData setValue:systemInfo[@"timezone"] forKey:@"timezone"];
+#else
+    [serializedData setValue:[SentryContext modelName] forKey:@"model"];
 #endif
 
     return serializedData;
@@ -147,6 +151,19 @@ NS_ASSUME_NONNULL_BEGIN
     return sharedInfo;
 }
 #endif
+
+
++ (NSString *)modelName {
+    size_t size;
+    sysctlbyname( "hw.machine", NULL, &size, NULL, 0);
+    char *cName = malloc( size);
+    sysctlbyname( "hw.machine", cName, &size, NULL, 0);
+    NSString *name = @(cName);
+    free( cName);
+    return name;
+}
+
+
 
 @end
 
