@@ -207,20 +207,20 @@ withCompletionHandler:(_Nullable SentryRequestFinished)completionHandler {
 
     NSString *storedEventPath = [self.fileManager storeEvent:event];
 
-    __block SentryClient *_self = self;
+    __weak typeof(self) weakSelf = self;
     [self sendRequest:request withCompletionHandler:^(NSHTTPURLResponse *_Nullable response, NSError *_Nullable error) {
         // We check if we should leave the event locally stored and try to send it again later
-        if (self.shouldQueueEvent == nil || self.shouldQueueEvent(event, response, error) == NO) {
-            [_self.fileManager removeFileAtPath:storedEventPath];
+        if (weakSelf.shouldQueueEvent == nil || weakSelf.shouldQueueEvent(event, response, error) == NO) {
+            [weakSelf.fileManager removeFileAtPath:storedEventPath];
         }
         if (nil == error) {
-            _self.lastEvent = event;
+            weakSelf.lastEvent = event;
             [NSNotificationCenter.defaultCenter postNotificationName:@"Sentry/eventSentSuccessfully"
                                                               object:nil
                                                             userInfo:[event serialize]];
             // Send all stored events in background if the queue is ready
-            if ([_self.requestManager isReady]) {
-                [_self sendAllStoredEvents];
+            if ([weakSelf.requestManager isReady]) {
+                [weakSelf sendAllStoredEvents];
             }
         }
         if (completionHandler) {
