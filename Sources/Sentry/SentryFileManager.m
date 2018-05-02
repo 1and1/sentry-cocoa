@@ -146,9 +146,11 @@ NSInteger const maxBreadcrumbs = 200;
 }
 
 - (NSString *)storeEvent:(SentryEvent *)event maxCount:(NSUInteger)maxCount {
-    NSString *result = [self storeDictionary:[event serialize] toPath:self.eventsPath];
-    [self handleFileManagerLimit:self.eventsPath maxCount:MIN(maxCount, maxEvents)];
-    return result;
+    @synchronized (self) {
+        NSString *result = [self storeDictionary:[event serialize] toPath:self.eventsPath];
+        [self handleFileManagerLimit:self.eventsPath maxCount:MIN(maxCount, maxEvents)];
+        return result;
+    }
 }
 
 - (NSString *)storeBreadcrumb:(SentryBreadcrumb *)crumb {
@@ -156,20 +158,24 @@ NSInteger const maxBreadcrumbs = 200;
 }
 
 - (NSString *)storeBreadcrumb:(SentryBreadcrumb *)crumb maxCount:(NSUInteger)maxCount {
-    NSString *result = [self storeDictionary:[crumb serialize] toPath:self.breadcrumbsPath];
-    [self handleFileManagerLimit:self.breadcrumbsPath maxCount:MIN(maxCount, maxBreadcrumbs)];
-    return result;
+    @synchronized (self) {
+        NSString *result = [self storeDictionary:[crumb serialize] toPath:self.breadcrumbsPath];
+        [self handleFileManagerLimit:self.breadcrumbsPath maxCount:MIN(maxCount, maxBreadcrumbs)];
+        return result;
+    }
 }
 
 - (NSString *)storeDictionary:(NSDictionary *)dictionary toPath:(NSString *)path {
-    if (![NSJSONSerialization isValidJSONObject:dictionary]) {
-        return nil;
-    }
-    NSData *saveData = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
     @synchronized (self) {
         NSString *finalPath = [path stringByAppendingPathComponent:[self uniqueAcendingJsonName]];
         [SentryLog logWithMessage:[NSString stringWithFormat:@"Writing to file: %@", finalPath] andLevel:kSentryLogLevelDebug];
-        [saveData writeToFile:finalPath options:NSDataWritingAtomic error:nil];
+        if ([NSJSONSerialization isValidJSONObject:dictionary]) {
+            NSData *saveData = [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:nil];
+            [saveData writeToFile:finalPath options:NSDataWritingAtomic error:nil];
+        } else {
+            [SentryLog logWithMessage:[NSString stringWithFormat:@"Invalid JSON, failed to write file %@", finalPath]
+                             andLevel:kSentryLogLevelError];
+        }
         return finalPath;
     }
 }

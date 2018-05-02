@@ -94,7 +94,7 @@ NSTimeInterval const SentryRequestTimeout = 15;
     [pathArray addObjectsFromArray:@[@"store", @""]];
     [pathArray replaceObjectAtIndex:0 withObject:@""];
     components.path = [pathArray componentsJoinedByString:@"/"];
-
+    
     return components.URL;
 }
 
