@@ -121,7 +121,7 @@ NSInteger const maxBreadcrumbs = 200;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error = nil;
     NSArray <NSString *> *storedFiles = [fileManager contentsOfDirectoryAtPath:path error:&error];
-    if (nil != error) {
+    if (storedFiles == nil) {
         [SentryLog logWithMessage:[NSString stringWithFormat:@"Couldn't load files in folder %@: %@", path, error] andLevel:kSentryLogLevelError];
         return [NSArray new];
     }
@@ -131,14 +131,11 @@ NSInteger const maxBreadcrumbs = 200;
 - (BOOL)removeFileAtPath:(NSString *)path {
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error = nil;
-    @synchronized (self) {
-        [fileManager removeItemAtPath:path error:&error];
-        if (nil != error) {
-            [SentryLog logWithMessage:[NSString stringWithFormat:@"Couldn't delete file %@: %@", path, error] andLevel:kSentryLogLevelError];
-            return NO;
-        }
+    BOOL success = [fileManager removeItemAtPath:path error:&error];
+    if (!success) {
+        [SentryLog logWithMessage:[NSString stringWithFormat:@"Couldn't delete file %@: %@", path, error] andLevel:kSentryLogLevelError];
     }
-    return YES;
+    return success;
 }
 
 - (NSString *)storeEvent:(SentryEvent *)event {
