@@ -54,6 +54,9 @@ NSTimeInterval const SentryRequestTimeout = 15;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:serialized
                                                        options:SentryClient.logLevel == kSentryLogLevelVerbose ? NSJSONWritingPrettyPrinted : 0
                                                          error:error];
+    if (jsonData == nil) {
+        return nil;
+    }
     
     if (SentryClient.logLevel == kSentryLogLevelVerbose) {
         [SentryLog logWithMessage:@"Sending JSON -------------------------------" andLevel:kSentryLogLevelVerbose];
@@ -66,6 +69,10 @@ NSTimeInterval const SentryRequestTimeout = 15;
 - (_Nullable instancetype)initStoreRequestWithDsn:(SentryDsn *)dsn
                                           andData:(NSData *)data
                                  didFailWithError:(NSError *_Nullable *_Nullable)error {
+    NSData *httpBody = [data sentry_gzippedWithCompressionLevel:-1 error:error];
+    if (httpBody == nil) {
+        return nil;
+    }
     NSURL *apiURL = [self.class getStoreUrlFromDsn:dsn];
     self = [super initWithURL:apiURL cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:SentryRequestTimeout];
     if (self) {
@@ -76,7 +83,7 @@ NSTimeInterval const SentryRequestTimeout = 15;
         [self setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         [self setValue:@"sentry-cocoa" forHTTPHeaderField:@"User-Agent"];
         [self setValue:@"gzip" forHTTPHeaderField:@"Content-Encoding"];
-        self.HTTPBody = [data sentry_gzippedWithCompressionLevel:-1 error:error];
+        self.HTTPBody = httpBody;
     }
     return self;
 }

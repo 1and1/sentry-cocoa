@@ -197,7 +197,7 @@ withCompletionHandler:(_Nullable SentryRequestFinished)completionHandler {
     SentryNSURLRequest *request = [[SentryNSURLRequest alloc] initStoreRequestWithDsn:self.dsn
                                                                              andEvent:event
                                                                      didFailWithError:&requestError];
-    if (nil != requestError) {
+    if (request == nil) {
         [SentryLog logWithMessage:requestError.localizedDescription andLevel:kSentryLogLevelError];
         if (completionHandler) {
             completionHandler(requestError);
