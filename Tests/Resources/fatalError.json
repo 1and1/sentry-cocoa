@@ -2440,13 +2440,6 @@
                             "instruction_addr": 4352660908
                         },
                         {
-                            "object_name": "Sentry",
-                            "object_addr": 4331057152,
-                            "symbol_name": "__44-[SentryBreadcrumbTracker swizzleSendAction]_block_invoke_2",
-                            "symbol_addr": 4331070352,
-                            "instruction_addr": 4331071850
-                        },
-                        {
                             "object_name": "UIKit",
                             "object_addr": 4352479232,
                             "symbol_name": "-[UIControl sendAction:to:forEvent:]",

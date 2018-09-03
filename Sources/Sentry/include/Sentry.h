@@ -17,7 +17,6 @@ FOUNDATION_EXPORT const unsigned char SentryVersionString[];
 #if __has_include(<Sentry/Sentry.h>)
 
 #import <Sentry/SentryClient.h>
-#import <Sentry/SentrySwizzle.h>
 
 #import <Sentry/SentryNSURLRequest.h>
 
@@ -39,7 +38,6 @@ FOUNDATION_EXPORT const unsigned char SentryVersionString[];
 #else
 
 #import "SentryClient.h"
-#import "SentrySwizzle.h"
 
 #import "SentryNSURLRequest.h"
 

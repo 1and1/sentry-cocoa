@@ -52,19 +52,6 @@
     XCTAssertFalse([client crashedLastLaunch]);
 }
 
-- (void)testBreadCrumbTracking {
-    NSError *error = nil;
-    SentryClient *client = [[SentryClient alloc] initWithDsn:@"https://username:password@app.getsentry.com/123456" didFailWithError:&error];
-    [client.breadcrumbs clear];
-    [client enableAutomaticBreadcrumbTracking];
-    XCTAssertEqual(client.breadcrumbs.count, (unsigned long)0);
-    [SentryClient setSharedClient:client];
-    [SentryClient.sharedClient enableAutomaticBreadcrumbTracking];
-    XCTAssertEqual(SentryClient.sharedClient.breadcrumbs.count, (unsigned long)1);
-    [SentryClient setSharedClient:nil];
-    [client.breadcrumbs clear];
-}
-
 - (void)testInstallation {
     SentryKSCrashInstallation *installation = [[SentryKSCrashInstallation alloc] init];
     [installation sendAllReports];

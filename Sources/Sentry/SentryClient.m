@@ -20,7 +20,6 @@
 #import <Sentry/SentryKSCrashInstallation.h>
 #import <Sentry/SentryBreadcrumbStore.h>
 #import <Sentry/SentryFileManager.h>
-#import <Sentry/SentryBreadcrumbTracker.h>
 
 #else
 #import "SentryClient.h"
@@ -35,7 +34,6 @@
 #import "SentryKSCrashInstallation.h"
 #import "SentryBreadcrumbStore.h"
 #import "SentryFileManager.h"
-#import "SentryBreadcrumbTracker.h"
 #endif
 
 #if __has_include(<KSCrash/KSCrash.h>)
@@ -123,10 +121,6 @@ requestManager:(id <SentryRequestManager>)requestManager
         // In all other cases we don't want to retry sending it and just discard the event
         return NO;
     };
-}
-
-- (void)enableAutomaticBreadcrumbTracking {
-    [[SentryBreadcrumbTracker alloc] start];
 }
 
 #pragma mark Static Getter/Setter

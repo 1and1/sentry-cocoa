@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		631501B71EE6EFFD00512C5B /* SentryBreadcrumbTracker.m in Sources */ = {isa = PBXBuildFile; fileRef = 631501B61EE6EFFD00512C5B /* SentryBreadcrumbTracker.m */; };
-		631501B91EE6F00600512C5B /* SentryBreadcrumbTracker.h in Headers */ = {isa = PBXBuildFile; fileRef = 631501B81EE6F00600512C5B /* SentryBreadcrumbTracker.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		631502871EE9861500512C5B /* KSCString.h in Headers */ = {isa = PBXBuildFile; fileRef = 6315027B1EE9861500512C5B /* KSCString.h */; };
 		631502881EE9861500512C5B /* KSCString.m in Sources */ = {isa = PBXBuildFile; fileRef = 6315027C1EE9861500512C5B /* KSCString.m */; };
 		631502951EE9868800512C5B /* KSCrashReportFilterBasic.h in Headers */ = {isa = PBXBuildFile; fileRef = 631502931EE9868800512C5B /* KSCrashReportFilterBasic.h */; };
@@ -218,8 +216,6 @@
 		630436091EC0595B00C4D3FA /* NSData+Compression.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Compression.m"; sourceTree = "<group>"; };
 		6304360D1EC05CEF00C4D3FA /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.12.sdk/usr/lib/libz.tbd; sourceTree = DEVELOPER_DIR; };
 		6304360F1EC0600A00C4D3FA /* SentrySerializable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SentrySerializable.h; path = include/SentrySerializable.h; sourceTree = "<group>"; };
-		631501B61EE6EFFD00512C5B /* SentryBreadcrumbTracker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SentryBreadcrumbTracker.m; sourceTree = "<group>"; };
-		631501B81EE6F00600512C5B /* SentryBreadcrumbTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SentryBreadcrumbTracker.h; path = include/SentryBreadcrumbTracker.h; sourceTree = "<group>"; };
 		6315027B1EE9861500512C5B /* KSCString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSCString.h; sourceTree = "<group>"; };
 		6315027C1EE9861500512C5B /* KSCString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KSCString.m; sourceTree = "<group>"; };
 		631502931EE9868800512C5B /* KSCrashReportFilterBasic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSCrashReportFilterBasic.h; sourceTree = "<group>"; };
@@ -800,8 +796,6 @@
 				63AA76781EB8D20500D153DE /* SentryLog.m */,
 				636085111ED47BE600E8599E /* SentryFileManager.h */,
 				636085121ED47BE600E8599E /* SentryFileManager.m */,
-				631501B81EE6F00600512C5B /* SentryBreadcrumbTracker.h */,
-				631501B61EE6EFFD00512C5B /* SentryBreadcrumbTracker.m */,
 				639889B91EDED18400EA7442 /* SentrySwizzle.h */,
 				639889BA1EDED18400EA7442 /* SentrySwizzle.m */,
 				632F43561F5826E000A18A36 /* SentryCrashExceptionApplication.h */,
@@ -891,7 +885,6 @@
 				632ABFFC1EE5AEC700B6E263 /* SentryNSURLRequest.h in Headers */,
 				632ABFFD1EE5AEC700B6E263 /* SentryError.h in Headers */,
 				632AC0001EE5AEC700B6E263 /* SentryThread.h in Headers */,
-				631501B91EE6F00600512C5B /* SentryBreadcrumbTracker.h in Headers */,
 				632AC00C1EE5AEC700B6E263 /* SentryDsn.h in Headers */,
 				632AC0151EE5AEC700B6E263 /* SentryFileManager.h in Headers */,
 				632AC01B1EE5AEC700B6E263 /* SentryKSCrashReportConverter.h in Headers */,
@@ -1072,7 +1065,6 @@
 				632ABF401EE5AEC700B6E263 /* SentryQueueableRequestManager.m in Sources */,
 				632ABF421EE5AEC700B6E263 /* SentryDsn.m in Sources */,
 				632ABF431EE5AEC700B6E263 /* KSCrashC.c in Sources */,
-				631501B71EE6EFFD00512C5B /* SentryBreadcrumbTracker.m in Sources */,
 				632ABF441EE5AEC700B6E263 /* SentryDebugMeta.m in Sources */,
 				632ABF451EE5AEC700B6E263 /* SentryClient.m in Sources */,
 				632ABF481EE5AEC700B6E263 /* KSCrashMonitor_AppState.c in Sources */,

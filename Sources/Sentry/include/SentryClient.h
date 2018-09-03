@@ -119,11 +119,7 @@ NS_SWIFT_NAME(Client)
 - (_Nullable instancetype)initWithDsn:(NSString *)dsn
                      didFailWithError:(NSError *_Nullable *_Nullable)error;
 
-/**
- * This automatically adds breadcrumbs for different user actions.
- */
-- (void)enableAutomaticBreadcrumbTracking;
-    
+   
 /**
  * Sends and event to sentry. Internally calls @selector(sendEvent:useClientProperties:withCompletionHandler:) with
  * useClientProperties: YES. CompletionHandler will be called if set.
