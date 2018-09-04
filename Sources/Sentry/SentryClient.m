@@ -222,13 +222,8 @@ requestManager:(id <SentryRequestManager>)requestManager
         }
         if (nil == error) {
             weakSelf.lastEvent = event;
-            [NSNotificationCenter.defaultCenter postNotificationName:@"Sentry/eventSentSuccessfully"
-                                                              object:nil
-                                                            userInfo:[event serialize]];
-            // Send all stored events in background if the queue is ready
-            if ([weakSelf.requestManager isReady]) {
-                [weakSelf sendAllStoredEvents];
-            }
+            // Send all stored events in background
+            [weakSelf sendAllStoredEvents];
         }
         if (completionHandler) {
             completionHandler(error);
@@ -261,11 +256,6 @@ requestManager:(id <SentryRequestManager>)requestManager
                 NSDictionary *serializedEvent = [NSJSONSerialization JSONObjectWithData:fileDictionary[@"data"]
                                                                                 options:0
                                                                                   error:nil];
-                if (nil != serializedEvent) {
-                    [NSNotificationCenter.defaultCenter postNotificationName:@"Sentry/eventSentSuccessfully"
-                                                                      object:nil
-                                                                    userInfo:serializedEvent];
-                }
             }
             // We want to delete the event here no matter what (if we had an internet connection)
             // since it has been tried already

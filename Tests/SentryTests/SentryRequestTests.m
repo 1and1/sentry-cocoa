@@ -254,23 +254,6 @@ NSString *dsn = @"https://username:password@app.getsentry.com/12345";
 
 }
 
-- (void)testRequestQueueReady {
-    SentryQueueableRequestManager *requestManager = [[SentryQueueableRequestManager alloc] initWithSession:[SentryMockNSURLSession new]];
-    SentryClient *client = [[SentryClient alloc] initWithDsn:dsn
-                                              requestManager:requestManager
-                                            didFailWithError:nil];
-
-    XCTAssertTrue(requestManager.isReady);
-
-    [client sendEvent:self.event withCompletionHandler:NULL];
-
-    for (NSInteger i = 0; i <= 5; i++) {
-        [client sendEvent:self.event withCompletionHandler:NULL];
-    }
-
-    XCTAssertFalse(requestManager.isReady);
-}
-
 - (void)testRequestQueueCancel {
     SentryClient.logLevel = kSentryLogLevelVerbose;
     SentryQueueableRequestManager *requestManager = [[SentryQueueableRequestManager alloc] initWithSession:[SentryMockNSURLSession new]];

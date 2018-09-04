@@ -35,14 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
         self.session = session;
         self.queue = [[NSOperationQueue alloc] init];
         self.queue.name = @"io.sentry.QueueableRequestManager.OperationQueue";
-        self.queue.maxConcurrentOperationCount = 3;
+        self.queue.maxConcurrentOperationCount = 1;
     }
     return self;
-}
-
-- (BOOL)isReady {
-    // We always have at least one operation in the queue when calling this
-    return self.queue.operationCount <= 1;
 }
 
 - (void)addRequest:(NSURLRequest *)request completionHandler:(_Nullable SentryRequestOperationFinished)completionHandler {
