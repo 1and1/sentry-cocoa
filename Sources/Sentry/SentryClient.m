@@ -57,6 +57,7 @@ static SentryKSCrashInstallation *installation = nil;
 @property(nonatomic, strong) SentryDsn *dsn;
 @property(nonatomic, strong) SentryFileManager *fileManager;
 @property(nonatomic, strong) id <SentryRequestManager> requestManager;
+@property (nonatomic) BOOL sendingEnabled;
 
 @end
 
@@ -84,6 +85,7 @@ requestManager:(id <SentryRequestManager>)requestManager
                      didFailWithError:(NSError *_Nullable *_Nullable)error {
     self = [super init];
     if (self) {
+        _sendingEnabled = YES;
         [self restoreContextBeforeCrash];
         [self setupQueueing];
         _extra = [NSDictionary new];
@@ -147,6 +149,19 @@ requestManager:(id <SentryRequestManager>)requestManager
 
 #pragma mark Event
 
+- (void)startSendingEvents
+{
+    self.sendingEnabled = YES;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(sendAllStoredEvents) object:nil];
+    [self performSelector:@selector(sendAllStoredEvents) withObject:nil afterDelay:0.5];
+}
+
+- (void)stopSendingEvents
+{
+    self.sendingEnabled = NO;
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(sendAllStoredEvents) object:nil];
+}
+
 - (void)sendEvent:(SentryEvent *)event withCompletionHandler:(_Nullable SentryRequestFinished)completionHandler {
     [self sendEvent:event useClientProperties:YES withCompletionHandler:completionHandler];
 }
@@ -168,9 +183,12 @@ requestManager:(id <SentryRequestManager>)requestManager
     [self.fileManager storeEvent:event];
 }
 
-- (void)    sendEvent:(SentryEvent *)event
-  useClientProperties:(BOOL)useClientProperties
-withCompletionHandler:(_Nullable SentryRequestFinished)completionHandler {
+- (void)sendEvent:(SentryEvent *)event useClientProperties:(BOOL)useClientProperties withCompletionHandler:(_Nullable SentryRequestFinished)completionHandler
+{
+    if (!self.sendingEnabled) {
+        return;
+    }
+    
     [self prepareEvent:event useClientProperties:useClientProperties];
     
     if (nil != self.shouldSendEvent && !self.shouldSendEvent(event)) {
@@ -218,15 +236,22 @@ withCompletionHandler:(_Nullable SentryRequestFinished)completionHandler {
     }];
 }
 
-- (void)  sendRequest:(SentryNSURLRequest *)request
-withCompletionHandler:(_Nullable SentryRequestOperationFinished)completionHandler {
+- (void)sendRequest:(SentryNSURLRequest *)request withCompletionHandler:(_Nullable SentryRequestOperationFinished)completionHandler
+{
+    if (!self.sendingEnabled) {
+        return;
+    }
     if (nil != self.beforeSendRequest) {
         self.beforeSendRequest(request);
     }
     [self.requestManager addRequest:request completionHandler:completionHandler];
 }
 
-- (void)sendAllStoredEvents {
+- (void)sendAllStoredEvents
+{
+    if (!self.sendingEnabled) {
+        return;
+    }
     for (NSDictionary<NSString *, id> *fileDictionary in [self.fileManager getAllStoredEvents]) {
         SentryNSURLRequest *request = [[SentryNSURLRequest alloc] initStoreRequestWithDsn:self.dsn
                                                                                   andData:fileDictionary[@"data"]

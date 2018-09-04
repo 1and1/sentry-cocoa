@@ -201,6 +201,9 @@ NS_SWIFT_NAME(send(event:completion:));
  */
 - (void)appendStacktraceToEvent:(SentryEvent *)event;
 
+- (void)startSendingEvents;
+- (void)stopSendingEvents;
+
 @end
 
 NS_ASSUME_NONNULL_END
